@@ -1,0 +1,14 @@
+{
+  "name": "vinca-express-app",
+  "version": "0.0.0",
+  "description": "VincaExpressApp",
+  "main": "app.js",
+  "author": {
+    "name": "vinca"
+  },
+  "dependencies": {
+    "express": "3.4.4",
+    "jade": "*",
+    "stylus": "*"
+  }
+}
