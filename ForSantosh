@@ -1,0 +1,95 @@
+package com.romil;
+
+import java.util.Comparator;
+import java.util.PriorityQueue;
+
+
+/*
+Test Case: Input - 7, 10, 4, 3, 9, 1, 6, 8, 9
+           Output - 7.0, 8.5, 7.0, 5.5, 7.0, 5.5, 6.0, 6.5, 7.0
+ */
+
+public class FindMedian {
+
+    static PriorityQueue<Integer> maxHeap = new PriorityQueue<Integer>(1, new Comparator<Integer>() {
+        @Override
+        public int compare(Integer integer, Integer t1) {
+            if (integer == t1) return 0;
+            if (integer > t1) return -1;
+            return 1;
+        }
+    });
+
+    static PriorityQueue<Integer> minHeap = new PriorityQueue<Integer>();
+    static int maxCount = 0;
+    static int minCount = 0;
+
+    public static void main(String[] args) {
+        int[] numbers = new int[]{7, 10, 4, 3, 9, 1, 6, 8};
+        for (int i = 0; i < numbers.length; i++) {
+            System.out.println(median(numbers[i]));
+        }
+
+        return;
+    }
+
+    static Double median(Integer number) {
+        if (minHeap.peek() == null && maxHeap.peek() == null){
+            minHeap.offer(number);
+            minCount++;
+            return getMedian();
+        }
+
+        if (minCount == maxCount) {
+            if (number > maxHeap.peek()) {
+                minHeap.offer(number);
+                minCount++;
+            } else {
+                maxHeap.offer(number);
+                maxCount++;
+            }
+
+            return getMedian();
+        }
+
+        if (minCount > maxCount) {
+            if (minHeap.peek() != null && number < minHeap.peek()) {
+                maxHeap.offer(number);
+                maxCount++;
+            } else {
+                int element = minHeap.poll();
+                maxHeap.offer(element);
+                minHeap.offer(number);
+                maxCount++;
+            }
+
+            return getMedian();
+        }
+
+        if (minCount < maxCount) {
+            if (minHeap.peek() != null && number > minHeap.peek()) {
+                minHeap.offer(number);
+                minCount++;
+            } else {
+                int element = maxHeap.poll();
+                minHeap.offer(element);
+                maxHeap.offer(number);
+                minCount++;
+            }
+
+            return getMedian();
+        }
+
+        return new Double(-1);
+
+    }
+
+    static Double getMedian() {
+        if (maxCount > minCount)
+            return maxHeap.peek().doubleValue();
+        else if (maxCount < minCount)
+            return minHeap.peek().doubleValue();
+        else
+            return (minHeap.peek().doubleValue() + maxHeap.peek().doubleValue())/2;
+    }
+}
